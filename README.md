@@ -125,7 +125,7 @@ This guide walks you through setting up a Kafka topic named `users` with Avro se
 
 Create the `users` topic using Kafka CLI:
 
-```bash
+```
 docker exec -it kafka   kafka-topics --create   --topic users   --bootstrap-server localhost:9092   --partitions 1  --replication-factor 1
 ```
 
@@ -145,14 +145,14 @@ Define your Avro schema for the `users` topic:
 
 ### Register it with the Schema Registry:
 ```
-bash
+
 curl -X POST -H "Content-Type: application/vnd.schemaregistry.v1+json" \\
   --data '{"schema": "{\\"type\\":\\"record\\",\\"name\\":\\"User\\",\\"fields\\":[{\\"name\\":\\"id\\",\\"type\\":\\"int\\"},{\\"name\\":\\"name\\",\\"type\\":\\"string\\"},{\\"name\\":\\"email\\",\\"type\\":\\"string\\"}]}" }'   http://localhost:8081/subjects/users-value/versions
   ```
 ##  3. Produce Data (Avro Format) - Connect `schema-registry` Container
 Produce messages using kafka-avro-console-producer:
 ```
-bash
+
 
 docker exec -it schema-registry   
 
@@ -177,7 +177,6 @@ json
 ## 4. Consume Avro Messages - Open An Another Terminal `schema-registry` Container
 Read Avro-encoded messages from the topic:
 ```
-bash
 docker exec -it schema-registry 
 
 kafka-avro-console-consumer --bootstrap-server kafka:9092 --topic users   --from-beginning   --property schema.registry.url=http://schema-registry:8081
@@ -186,16 +185,14 @@ kafka-avro-console-consumer --bootstrap-server kafka:9092 --topic users   --from
 ## 5. Create Stream with ksqlDB (Optional) -Connect `ksqldb-cli` Container
 Enter the ksqlDB CLI:
 ```
-bash
+
 
 docker exec -it ksqldb-cli 
 
 ksql http://ksqldb-server:8088
 ```
-
 ### Create a stream from the topic:
 ```
-sql
 CREATE STREAM users_stream (
   id INT,
   name STRING,
@@ -207,13 +204,12 @@ CREATE STREAM users_stream (
 ```
 ### Query data:
 ```
-sql
 SELECT * FROM users_stream EMIT CHANGES;
 ```
 ## 6. View Raw Topic Data
 To see raw topic data (not Avro-decoded):
 ```
-bash
+
 docker exec -it kafka   kafka-console-consumer   --bootstrap-server localhost:9092   --topic users   --from-beginning
 ```
 
