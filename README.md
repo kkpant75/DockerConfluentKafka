@@ -145,15 +145,12 @@ Define your Avro schema for the `users` topic:
 
 ### Register it with the Schema Registry:
 ```
-
 curl -X POST -H "Content-Type: application/vnd.schemaregistry.v1+json" \\
   --data '{"schema": "{\\"type\\":\\"record\\",\\"name\\":\\"User\\",\\"fields\\":[{\\"name\\":\\"id\\",\\"type\\":\\"int\\"},{\\"name\\":\\"name\\",\\"type\\":\\"string\\"},{\\"name\\":\\"email\\",\\"type\\":\\"string\\"}]}" }'   http://localhost:8081/subjects/users-value/versions
   ```
 ##  3. Produce Data (Avro Format) - Connect `schema-registry` Container
 Produce messages using kafka-avro-console-producer:
 ```
-
-
 docker exec -it schema-registry   
 
 kafka-avro-console-producer   --broker-list kafka:9092   --topic users --property value.schema='{
@@ -185,8 +182,6 @@ kafka-avro-console-consumer --bootstrap-server kafka:9092 --topic users   --from
 ## 5. Create Stream with ksqlDB (Optional) -Connect `ksqldb-cli` Container
 Enter the ksqlDB CLI:
 ```
-
-
 docker exec -it ksqldb-cli 
 
 ksql http://ksqldb-server:8088
@@ -209,7 +204,6 @@ SELECT * FROM users_stream EMIT CHANGES;
 ## 6. View Raw Topic Data
 To see raw topic data (not Avro-decoded):
 ```
-
 docker exec -it kafka   kafka-console-consumer   --bootstrap-server localhost:9092   --topic users   --from-beginning
 ```
 
