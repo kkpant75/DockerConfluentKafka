@@ -12,7 +12,7 @@
 - Docker Compose
 - Docker Networking
 
-## Exeute Docker Compose file `docker-compose.yml`
+## Execute Docker Compose file `docker-compose.yml`
 ```
 docker compose up -d
 ```
